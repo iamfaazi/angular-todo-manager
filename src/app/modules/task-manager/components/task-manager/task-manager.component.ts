@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Task } from '../../models/task.model';
-import { Priority } from '../../models/enums/Task';
+import { Priority, SortBy, Status } from '../../models/enums/Task';
 import { TaskService } from '../../../../services/task.service';
 
 @Component({
@@ -15,15 +14,14 @@ export class TaskManagerComponent implements OnInit {
   newTaskTitle: string = '';
   newTaskPriority: Priority = Priority.Low;
   searchQuery: string = ''; // Add search query property
-  sortBy: 'priority' | 'status' = 'priority';
+  sortBy: SortBy = SortBy.Priority; // Default sort by priority
 
-  constructor(
-    private snackBar: MatSnackBar,
-    private taskService: TaskService
-  ) {}
+  constructor(private taskService: TaskService) {}
 
   ngOnInit() {
-    this.tasks = this.taskService.getTasks();
+    this.taskService.tasks$.subscribe((tasks) => {
+      this.tasks = tasks;
+    });
   }
 
   loadTasks() {
@@ -39,17 +37,20 @@ export class TaskManagerComponent implements OnInit {
         task.title.toLowerCase().includes(this.searchQuery.toLowerCase())
       )
       .sort((a, b) => {
-        if (this.sortBy === 'priority') {
-          // Compare the enum values directly
+        if (this.sortBy === SortBy.Priority) {
           return (
             Object.values(Priority).indexOf(a.priority as any) -
             Object.values(Priority).indexOf(b.priority as any)
           );
         } else {
-          return Number(a.status) - Number(b.status);
+          return (
+            Number(a.status === Status.Done) - Number(b.status === Status.Done)
+          );
         }
       });
   }
 
-  onTaskCreated($event: any) {}
+  onTaskCreated(task: Task) {
+    this.taskService.addTask(task);
+  }
 }

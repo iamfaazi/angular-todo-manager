@@ -8,3 +8,8 @@ export enum Status {
   NotDone = 'not done',
   Done = 'done',
 }
+
+export enum SortBy {
+  Priority = 'priority',
+  Status = 'status',
+}

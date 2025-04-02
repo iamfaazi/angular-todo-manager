@@ -1,52 +1,55 @@
 import { Injectable } from '@angular/core';
 import { Task } from '../modules/task-manager/models/task.model';
-import { Status } from '../modules/task-manager/models/enums/Task';
+import { Priority, Status } from '../modules/task-manager/models/enums/Task';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TaskService {
-  private tasks: Task[] = [];
+  private tasksSubject = new BehaviorSubject<Task[]>(this.loadTasks());
+  tasks$ = this.tasksSubject.asObservable();
 
-  constructor() {
-    this.loadTasks();
-  }
+  constructor() {}
 
-  private loadTasks() {
+  private loadTasks(): Task[] {
     const storedTasks = localStorage.getItem('tasks');
-    this.tasks = (storedTasks ? JSON.parse(storedTasks) : []).map(
-      (task: any) => ({
-        ...task,
-        status: task.status === 'done' ? Status.Done : Status.NotDone, // Convert strings to enums
-      })
-    );
+    return storedTasks ? JSON.parse(storedTasks) : [];
   }
 
-  private saveTasks() {
-    localStorage.setItem('tasks', JSON.stringify(this.tasks));
+  private saveTasks(tasks: Task[]) {
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+    this.tasksSubject.next(tasks); // Notify subscribers of changes
   }
 
   getTasks(): Task[] {
-    return this.tasks;
+    return this.tasksSubject.getValue();
   }
 
-  addTask(task: Task) {
-    this.tasks.push(task);
-    this.saveTasks();
+  addTask(newTask: Task) {
+    const updatedTasks = [...this.getTasks(), newTask];
+    this.saveTasks(updatedTasks);
   }
 
   deleteTask(id: number) {
-    this.tasks = this.tasks.filter((task) => task.id !== id);
-    this.saveTasks();
+    const updatedTasks = this.getTasks().filter((task) => task.id !== id);
+    this.saveTasks(updatedTasks);
   }
 
-  toggleStatus(id: number): void {
-    const task = this.tasks.find((task) => task.id === id);
-    if (task) {
-      // Toggle between 'NotDone' and 'Done'
-      task.status =
-        task.status === Status.NotDone ? Status.Done : Status.NotDone;
-      this.saveTasks();
-    }
+  toggleStatus(id: number) {
+    const updatedTasks = this.getTasks().map((task) =>
+      task.id === id
+        ? {
+            ...task,
+            status: task.status === Status.Done ? Status.NotDone : Status.Done,
+          }
+        : task
+    );
+
+    //@TODO: remove console.log
+    console.log('====================================');
+    console.log(updatedTasks);
+    console.log('====================================');
+    this.saveTasks(updatedTasks);
   }
 }

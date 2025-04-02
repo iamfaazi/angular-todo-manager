@@ -15,6 +15,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule, Routes } from '@angular/router';
+import { MatCardModule } from '@angular/material/card';
 
 const routes: Routes = [
   { path: '', component: TaskManagerComponent }, // Default route for this module
@@ -32,6 +33,7 @@ const routes: Routes = [
     MatCheckboxModule,
     MatButtonModule,
     MatIconModule,
+    MatCardModule,
     RouterModule.forChild(routes),
   ],
   exports: [

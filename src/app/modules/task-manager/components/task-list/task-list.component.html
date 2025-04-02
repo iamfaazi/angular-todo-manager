@@ -1,13 +1,22 @@
 <mat-list>
-  <mat-list-item *ngFor="let task of tasks">
-    <mat-checkbox [(ngModel)]="task.status" (change)="toggleStatus(task.id)">
-      {{ task.title }}
-    </mat-checkbox>
-    <span class="priority" [ngClass]="task.priority.toLowerCase()">{{
-      task.priority
-    }}</span>
-    <button mat-icon-button color="warn" (click)="deleteTask(task.id)">
-      <mat-icon>delete</mat-icon>
-    </button>
+  <mat-list-item *ngFor="let task of tasks" class="task-item">
+    <mat-card appearance="outlined" class="content-card">
+      <mat-card-content>
+        <mat-checkbox
+          [checked]="getStatus(task.status)"
+          (change)="toggleStatus(task.id)"
+        >
+          {{ task.title }}
+        </mat-checkbox>
+
+        <mat-chip class="priority" [ngClass]="task.priority.toLowerCase()">
+          {{ task.priority }}
+        </mat-chip>
+
+        <button mat-icon-button color="warn" (click)="deleteTask(task.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-card-content>
+    </mat-card>
   </mat-list-item>
 </mat-list>

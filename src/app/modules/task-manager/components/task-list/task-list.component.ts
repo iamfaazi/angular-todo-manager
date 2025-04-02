@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { TaskService } from '../../../../services/task.service';
 import { Task } from '../../models/task.model';
+import { Status } from '../../models/enums/Task';
 
 @Component({
   selector: 'app-task-list',
@@ -19,5 +20,9 @@ export class TaskListComponent {
 
   deleteTask(id: number) {
     this.taskService.deleteTask(id);
+  }
+
+  getStatus(status: Status) {
+    return status === Status.Done;
   }
 }
