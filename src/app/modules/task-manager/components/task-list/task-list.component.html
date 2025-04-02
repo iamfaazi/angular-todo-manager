@@ -1,0 +1,13 @@
+<mat-list>
+  <mat-list-item *ngFor="let task of tasks">
+    <mat-checkbox [(ngModel)]="task.status" (change)="toggleStatus(task.id)">
+      {{ task.title }}
+    </mat-checkbox>
+    <span class="priority" [ngClass]="task.priority.toLowerCase()">{{
+      task.priority
+    }}</span>
+    <button mat-icon-button color="warn" (click)="deleteTask(task.id)">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </mat-list-item>
+</mat-list>

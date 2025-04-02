@@ -1,0 +1,26 @@
+<div class="task-manager-container">
+  <h1>Task Manager</h1>
+
+  <!-- Task Creation Form -->
+  <app-task-form (taskCreated)="onTaskCreated($event)"></app-task-form>
+
+  <!-- Search and Sorting Controls -->
+  <div class="controls">
+    <mat-form-field appearance="outline">
+      <mat-label>Search</mat-label>
+      <input matInput [(ngModel)]="searchQuery" placeholder="Search tasks" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="sort-select">
+      <mat-label>Filter By</mat-label>
+      <mat-label>Sort By</mat-label>
+      <mat-select [(ngModel)]="sortBy">
+        <mat-option value="priority">Priority</mat-option>
+        <mat-option value="status">Status</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <!-- Task List Display -->
+  <app-task-list [tasks]="filteredTasks"></app-task-list>
+</div>

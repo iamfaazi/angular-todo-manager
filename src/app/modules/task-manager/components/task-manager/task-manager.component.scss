@@ -1,0 +1,25 @@
+.task-manager-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  flex-direction: column;
+}
+
+
+.controls {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  margin: 20px 0; /* Add some spacing around the container */
+  width: 100%; /* Make the container take full width */
+
+  .sort-select{
+    width: 200px; /* Set a fixed width for the select box */
+  }
+}
+
+mat-form-field {
+  width: 100%; /* Make the form field expand to fit the container */
+  max-width: 500px; /* Optionally set a max-width */
+}
